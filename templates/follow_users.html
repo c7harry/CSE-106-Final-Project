@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Follow Users</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -14,12 +14,17 @@
         <nav>
             <a href="{{ url_for('create_post') }}">Create Post</a>
             <a href="{{ url_for('view_feed') }}">View Feed</a>
-            <a href="{{ url_for('follow_users') }}">Follow Users</a>
         </nav>
     </div>
 
     <div class="main-content">
-        <!-- Content for the home page -->
+        <div class="follow-users">
+            <h3>Follow Users</h3>
+            <form action="{{ url_for('follow', username='') }}" method="post">
+                <input type="text" name="username" placeholder="Enter username to follow">
+                <input type="submit" value="Follow">
+            </form>
+        </div>
     </div>
 </body>
 </html>

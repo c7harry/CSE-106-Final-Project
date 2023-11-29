@@ -119,3 +119,27 @@ footer {
     max-width: 100%;
     height: auto;
 }
+
+.top-nav {
+    background-color: #4c66a4;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.top-nav nav {
+    display: inline-block;
+}
+
+.top-nav nav a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    margin: 0 5px;
+    border-radius: 4px;
+    background-color: #365899;
+    transition: background-color 0.3s;
+}
+
+.top-nav nav a:hover {
+    background-color: #2d4f8b;
+}

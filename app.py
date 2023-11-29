@@ -89,6 +89,24 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+@app.route('/create_post')
+@login_required
+def create_post():
+    form = PostForm()
+    return render_template('create_post.html', form=form)
+
+@app.route('/view_feed')
+@login_required
+def view_feed():
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template('view_feed.html', posts=posts)
+
+@app.route('/follow_users')
+@login_required
+def follow_users():
+    # Implement logic to display follow users section
+    return render_template('follow_users.html')
+
 @app.route('/post', methods=['GET', 'POST'])
 @login_required
 def post():
