@@ -9,7 +9,7 @@
     <header>
         <h1>Social Media App</h1>
     </header>
-
+    
     <div class="top-nav">
         <nav>
             <a href="{{ url_for('create_post') }}">Create Post</a>
@@ -17,6 +17,10 @@
         </nav>
     </div>
 
+    <div class="logout-button">
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+    
     <div class="main-content">
         <div class="follow-users">
             <h3>Follow Users</h3>

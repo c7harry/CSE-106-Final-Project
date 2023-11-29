@@ -18,6 +18,7 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    likes = db.relationship('Like', backref='user', lazy='dynamic')
     followed = db.relationship(
         'User', secondary='follow',
         primaryjoin=(Follow.follower_id == id),

@@ -120,7 +120,7 @@ def post():
         db.session.add(post)
         db.session.commit()
         return redirect(url_for('home'))
-    return redirect(url_for('home'))
+    return redirect(request.referrer or url_for('home'))
 
 @app.route('/follow/<username>')
 @login_required
@@ -132,7 +132,7 @@ def follow(username):
     current_user.follow(user)
     db.session.commit()
     flash('You are following {}!'.format(username))
-    return redirect(url_for('index'))
+    return redirect(request.referrer or url_for('index'))
 
 @app.route('/unfollow/<username>')
 @login_required
@@ -144,7 +144,7 @@ def unfollow(username):
     current_user.unfollow(user)
     db.session.commit()
     flash('You are not following {}.'.format(username))
-    return redirect(url_for('index'))
+    return redirect(request.referrer or url_for('index'))
 
 @app.route('/like/<int:post_id>')
 @login_required
@@ -155,7 +155,7 @@ def like_post(post_id):
         return redirect(url_for('index'))
     current_user.like_post(post)
     db.session.commit()
-    return redirect(url_for('index'))
+    return redirect(request.referrer or url_for('index'))
 
 @app.route('/unlike/<int:post_id>')
 @login_required
@@ -166,7 +166,7 @@ def unlike_post(post_id):
         return redirect(url_for('index'))
     current_user.unlike_post(post)
     db.session.commit()
-    return redirect(url_for('home'))
+    return redirect(request.referrer or url_for('index'))
 
 @app.route('/delete_post/<int:post_id>')
 @login_required
@@ -178,7 +178,7 @@ def delete_post(post_id):
     Like.query.filter_by(post_id=post_id).delete()
     db.session.delete(post)
     db.session.commit()
-    return redirect(url_for('home'))
+    return redirect(request.referrer or url_for('home'))
 
 if __name__ == '__main__':
     with app.app_context():
