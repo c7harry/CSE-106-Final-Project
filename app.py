@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, redirect, flash, request
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from forms import RegistrationForm, LoginForm, PostForm
-from models import User, Post, db, Follow
+from models import User,Like, Post, db, Follow
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
@@ -124,6 +124,20 @@ def unlike_post(post_id):
     db.session.commit()
     flash('You unliked a post.')
     return redirect(url_for('index'))
+
+@app.route('/delete_post/<int:post_id>')
+@login_required
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author.id != current_user.id:
+        flash('You cannot delete this post.', 'danger')
+        return redirect(url_for('home'))
+    # Delete all likes associated with the post
+    Like.query.filter_by(post_id=post_id).delete()
+    db.session.delete(post)
+    db.session.commit()
+    flash('Your post has been deleted.', 'success')
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     with app.app_context():
