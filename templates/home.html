@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome, {{ current_user.username }}</h1>
+    <a href="{{ url_for('logout') }}">Logout</a>
+
+    <!-- Display posts -->
+    {% for post in posts %}
+        <div>
+            <p>{{ post.author.username }}: {{ post.content }}</p>
+            <!-- Like/Unlike button -->
+            <!-- Implement like/unlike functionality -->
+        </div>
+    {% endfor %}
+
+    <!-- Form to post a status update -->
+    <!-- Implement form to post updates -->
+
+    <!-- Option to follow other users -->
+    <!-- Implement following functionality -->
+</body>
+</html>
