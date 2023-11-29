@@ -6,8 +6,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Welcome to the Social Media App</h1>
-    <a href="{{ url_for('login') }}">Login</a>
-    <a href="{{ url_for('register') }}">Register</a>
+    <header>Social Media App</header>
+    <div class="container">
+        <a href="{{ url_for('login') }}">Login</a> | 
+        <a href="{{ url_for('register') }}">Register</a>
+    </div>
+    <footer>Footer Content</footer>
 </body>
 </html>
