@@ -30,12 +30,14 @@ def register():
         return redirect(url_for('home'))
 
     form = RegistrationForm()
-    if form.validate_on_submit():
+
+    if request.method == 'POST':
         user_exists = User.query.filter_by(username=form.username.data).first()
         if user_exists:
             flash('Username already exists. Please choose a different one.', 'danger')
-            return redirect(url_for('register'))
+            return render_template('register.html', title='Register', form=form)
 
+    if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data)
         user = User(username=form.username.data, 
                     password_hash=hashed_password,
