@@ -38,7 +38,7 @@
             <p><strong>{{ post.author.username }}</strong>: {{ post.content }}</p>
             <!-- Display the image if it exists -->
             {% if post.image %}
-            <img src="{{ url_for('static', filename='uploads/' + post.image) }}" alt="{{ post.content }} Image">
+            <img src="{{ url_for('uploaded_file', filename=post.image) }}" alt="{{ post.content }} Image">
             {% endif %}
             
             <!-- Delete button -->

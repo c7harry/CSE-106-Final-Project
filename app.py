@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, url_for, redirect, flash, request
+from flask import Flask, render_template, url_for, redirect, flash, request, send_from_directory
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from forms import RegistrationForm, LoginForm, PostForm
 from models import User,Like, Post, db, Follow
@@ -27,6 +27,10 @@ def load_user(user_id):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

@@ -114,3 +114,8 @@ footer {
     background-color: #3b5998;
     color: white;
 }
+
+.post img {
+    max-width: 100%;
+    height: auto;
+}
