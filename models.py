@@ -13,6 +13,8 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
+    first_name = db.Column(db.String(100), nullable=False)
+    last_name = db.Column(db.String(100), nullable=False)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     followed = db.relationship(
         'User', secondary='follow',

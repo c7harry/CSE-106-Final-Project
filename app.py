@@ -26,10 +26,16 @@ def index():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data)
-        user = User(username=form.username.data, password_hash=hashed_password)
+        user = User(username=form.username.data, 
+                    password_hash=hashed_password,
+                    first_name=form.first_name.data,
+                    last_name=form.last_name.data)
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
@@ -123,7 +129,7 @@ def unlike_post(post_id):
     current_user.unlike_post(post)
     db.session.commit()
     flash('You unliked a post.')
-    return redirect(url_for('index'))
+    return redirect(url_for('home'))
 
 @app.route('/delete_post/<int:post_id>')
 @login_required

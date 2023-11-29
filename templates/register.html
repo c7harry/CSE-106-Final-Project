@@ -11,6 +11,14 @@
         <form method="post">
             {{ form.hidden_tag() }}
             <p>
+                {{ form.first_name.label }}<br>
+                {{ form.first_name(size=32) }}
+            </p>
+            <p>
+                {{ form.last_name.label }}<br>
+                {{ form.last_name(size=32) }}
+            </p>
+            <p>
                 {{ form.username.label }}<br>
                 {{ form.username(size=32) }}
             </p>
