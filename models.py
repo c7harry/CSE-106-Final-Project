@@ -2,6 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from datetime import datetime
+from werkzeug.utils import secure_filename
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 db = SQLAlchemy()
 
@@ -60,6 +62,7 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     likes = db.relationship('Like', backref='post', lazy='dynamic')
+    image = db.Column(db.String(255))
 
 class Like(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)

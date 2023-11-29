@@ -1,14 +1,18 @@
+import os
 from flask import Flask, render_template, url_for, redirect, flash, request
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from forms import RegistrationForm, LoginForm, PostForm
 from models import User,Like, Post, db, Follow
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key' 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///social_media.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
+
 
 db.init_app(app)
 
@@ -60,7 +64,6 @@ def login():
             user = User.query.filter_by(username=form.username.data).first()
             if user and check_password_hash(user.password_hash, form.password.data):
                 login_user(user)
-                flash('You have been logged in!', 'success')
                 next_page = request.args.get('next')
                 return redirect(next_page) if next_page else redirect(url_for('home'))
             else:
@@ -88,9 +91,12 @@ def post():
     form = PostForm()
     if form.validate_on_submit():
         post = Post(content=form.content.data, user_id=current_user.id)
+        if form.image.data:
+            filename = secure_filename(form.image.data.filename)
+            form.image.data.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            post.image = filename
         db.session.add(post)
         db.session.commit()
-        flash('Your post has been created!', 'success')
         return redirect(url_for('home'))
     return redirect(url_for('home'))
 
@@ -127,7 +133,6 @@ def like_post(post_id):
         return redirect(url_for('index'))
     current_user.like_post(post)
     db.session.commit()
-    flash('You liked a post.')
     return redirect(url_for('index'))
 
 @app.route('/unlike/<int:post_id>')
@@ -139,7 +144,6 @@ def unlike_post(post_id):
         return redirect(url_for('index'))
     current_user.unlike_post(post)
     db.session.commit()
-    flash('You unliked a post.')
     return redirect(url_for('home'))
 
 @app.route('/delete_post/<int:post_id>')
@@ -149,11 +153,9 @@ def delete_post(post_id):
     if post.author.id != current_user.id:
         flash('You cannot delete this post.', 'danger')
         return redirect(url_for('home'))
-    # Delete all likes associated with the post
     Like.query.filter_by(post_id=post_id).delete()
     db.session.delete(post)
     db.session.commit()
-    flash('Your post has been deleted.', 'success')
     return redirect(url_for('home'))
 
 if __name__ == '__main__':
