@@ -6,50 +6,61 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Welcome, {{ current_user.username }}</h1>
-    <a href="{{ url_for('logout') }}">Logout</a>
+    <header>
+        <h1>Social Media App</h1>
+    </header>
 
-    <!-- Form to post a status update -->
-    <div>
-        <h2>Create a New Post</h2>
-        <form method="post" action="{{ url_for('post') }}">
-            {{ form.hidden_tag() }}
-            <p>
-                {{ form.content.label }}<br>
-                {{ form.content(rows=4, cols=50) }}
-            </p>
-            <p>{{ form.submit() }}</p>
-        </form>
+    <div class="logout-button">
+        <a href="{{ url_for('logout') }}">Logout</a>
     </div>
 
-    <!-- Display posts -->
-    {% for post in posts %}
-        <div>
-            <p>{{ post.author.username }}: {{ post.content }}</p>
-            
-            <!-- Delete button -->
-            {% if post.author.id == current_user.id %}
-            <a href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>
-            {% endif %}
-
-            <!-- Like/Unlike button -->
-            {% if current_user.is_authenticated %}
-                {% if current_user.has_liked_post(post) %}
-                    <a href="{{ url_for('unlike_post', post_id=post.id) }}">Unlike</a>
-                {% else %}
-                    <a href="{{ url_for('like_post', post_id=post.id) }}">Like</a>
-                {% endif %}
-            {% endif %}
+    <div class="main-content">
+        <!-- Form to post a status update -->
+        <div class="post-form">
+            <h2>Create a New Post</h2>
+            <form method="post" action="{{ url_for('post') }}">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.content.label }}<br>
+                    {{ form.content(rows=4, cols=50) }}
+                </p>
+                <p>{{ form.submit() }}</p>
+            </form>
         </div>
-    {% endfor %}
+
+        <!-- Display posts -->
+        <div class="posts">
+            {% for post in posts %}
+                <div class="post">
+                    <p><strong>{{ post.author.username }}</strong>: {{ post.content }}</p>
+                    
+                    <!-- Delete button -->
+                    {% if post.author.id == current_user.id %}
+                        <a href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>
+                    {% endif %}
+
+                    <!-- Like/Unlike button -->
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.has_liked_post(post) %}
+                            <a href="{{ url_for('unlike_post', post_id=post.id) }}">Unlike</a>
+                        {% else %}
+                            <a href="{{ url_for('like_post', post_id=post.id) }}">Like</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
 
         <!-- Option to follow other users -->
-        <h3>Follow Users</h3>
-        <form action="{{ url_for('follow', username='') }}" method="post">
-            <input type="text" name="username" placeholder="Enter username to follow">
-            <input type="submit" value="Follow">
-        </form>
+        <div class="follow-users">
+            <h3>Follow Users</h3>
+            <form action="{{ url_for('follow', username='') }}" method="post">
+                <input type="text" name="username" placeholder="Enter username to follow">
+                <input type="submit" value="Follow">
+            </form>
+        </div>
     </div>
+
     <footer>Footer Content</footer>
 </body>
 </html>
