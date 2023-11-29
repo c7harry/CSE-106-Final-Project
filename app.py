@@ -1,8 +1,9 @@
 from flask import Flask, render_template, url_for, redirect, flash, request
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from forms import RegistrationForm, LoginForm, PostForm
-from models import User, Post, db
+from models import User, Post, db, Follow
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key' 
@@ -11,10 +12,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
@@ -22,6 +19,10 @@ login_manager.login_message_category = 'info'
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -54,10 +55,12 @@ def login():
 @app.route('/home')
 @login_required
 def home():
-    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    followed_users = [user.id for user in current_user.followed.all()]
+    posts = Post.query.filter(Post.user_id.in_(followed_users)).order_by(Post.timestamp.desc()).all()
     return render_template('home.html', posts=posts)
 
 @app.route("/logout")
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
@@ -75,6 +78,7 @@ def post():
     return render_template('post.html', title='New Post', form=form)
 
 @app.route('/follow/<username>')
+@login_required
 def follow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
@@ -86,6 +90,7 @@ def follow(username):
     return redirect(url_for('index'))
 
 @app.route('/unfollow/<username>')
+@login_required
 def unfollow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
@@ -97,6 +102,7 @@ def unfollow(username):
     return redirect(url_for('index'))
 
 @app.route('/like/<int:post_id>')
+@login_required
 def like_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post is None:
@@ -108,6 +114,7 @@ def like_post(post_id):
     return redirect(url_for('index'))
 
 @app.route('/unlike/<int:post_id>')
+@login_required
 def unlike_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post is None:
