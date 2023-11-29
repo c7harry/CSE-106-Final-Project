@@ -31,6 +31,11 @@ def register():
 
     form = RegistrationForm()
     if form.validate_on_submit():
+        user_exists = User.query.filter_by(username=form.username.data).first()
+        if user_exists:
+            flash('Username already exists. Please choose a different one.', 'danger')
+            return redirect(url_for('register'))
+
         hashed_password = generate_password_hash(form.password.data)
         user = User(username=form.username.data, 
                     password_hash=hashed_password,
@@ -46,16 +51,20 @@ def register():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
+
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user and check_password_hash(user.password_hash, form.password.data):
-            login_user(user)
-            flash('You have been logged in!', 'success')
-            next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('home'))
-        else:
-            flash('Login Unsuccessful. Please check username and password', 'danger')
+        try:
+            user = User.query.filter_by(username=form.username.data).first()
+            if user and check_password_hash(user.password_hash, form.password.data):
+                login_user(user)
+                flash('You have been logged in!', 'success')
+                next_page = request.args.get('next')
+                return redirect(next_page) if next_page else redirect(url_for('home'))
+            else:
+                flash('Login Unsuccessful. Please check username and password', 'danger')
+        except Exception as e:
+            flash('An error occurred during login. Please try again.', 'danger')
     return render_template('login.html', title='Login', form=form)
 
 @app.route('/home')
