@@ -55,9 +55,9 @@ def login():
 @app.route('/home')
 @login_required
 def home():
-    followed_users = [user.id for user in current_user.followed.all()]
-    posts = Post.query.filter(Post.user_id.in_(followed_users)).order_by(Post.timestamp.desc()).all()
-    return render_template('home.html', posts=posts)
+    form = PostForm()
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template('home.html', posts=posts, form=form)
 
 @app.route("/logout")
 @login_required
@@ -74,8 +74,8 @@ def post():
         db.session.add(post)
         db.session.commit()
         flash('Your post has been created!', 'success')
-        return redirect(url_for('index'))
-    return render_template('post.html', title='New Post', form=form)
+        return redirect(url_for('home'))
+    return redirect(url_for('home'))
 
 @app.route('/follow/<username>')
 @login_required
