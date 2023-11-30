@@ -6,12 +6,25 @@ body {
 }
 
 .container {
-    width: 60%;
-    margin: auto;
-    padding: 20px;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    text-align: center;
+}
+
+.container a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 10px;
+    border-radius: 4px;
+    background-color: #0F2D52;
+    transition: background-color 0.3s, transform 0.2s;
+}
+.container a:hover {
+    background-color: #DAA900;
 }
 
 header {
@@ -20,7 +33,7 @@ header {
     justify-content: center;
     background-color: #0F2D52;
     color: white;
-    padding: 10px 20px;
+    padding: 10px 0px;
 }
 
 .logout-button {
