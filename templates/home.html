@@ -1,29 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <h1>Social Media App</h1>
-    </header>
+{% extends "base.html" %}
 
-    <div class="top-nav">
-        <nav>
-            <a href="{{ url_for('create_post') }}">Create Post</a>
-            <a href="{{ url_for('view_feed') }}">View Feed</a>
-            <a href="{{ url_for('follow_users') }}">Follow Users</a>
-        </nav>
-    </div>
+{% block title %}Home{% endblock %}
 
-    <div class="logout-button">
-        <a href="{{ url_for('logout') }}">Logout</a>
-    </div>
-    
-    <div class="main-content">
-        <!-- Content for the home page -->
-    </div>
-</body>
-</html>
+{% block navigation %}
+    <a href="{{ url_for('create_post') }}">Create Post</a>
+    <a href="{{ url_for('view_feed') }}">View Feed</a>
+    <a href="{{ url_for('follow_users') }}">Follow Users</a>
+{% endblock %}
+
+{% block content %}
+    <!-- Content for the home page -->
+    <!-- You can add specific content for the home page here -->
+{% endblock %}
+

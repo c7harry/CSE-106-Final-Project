@@ -1,34 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Follow Users</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <h1>Social Media App</h1>
-    </header>
-    
-    <div class="top-nav">
-        <nav>
-            <a href="{{ url_for('create_post') }}">Create Post</a>
-            <a href="{{ url_for('view_feed') }}">View Feed</a>
-        </nav>
-    </div>
+{% extends "base.html" %}
 
-    <div class="logout-button">
-        <a href="{{ url_for('logout') }}">Logout</a>
+{% block title %}Follow Users{% endblock %}
+
+{% block navigation %}
+    <a href="{{ url_for('create_post') }}">Create Post</a>
+    <a href="{{ url_for('view_feed') }}">View Feed</a>
+{% endblock %}
+
+{% block content %}
+    <div class="follow-users">
+        <h3>Follow Users</h3>
+        <form action="{{ url_for('follow', username='') }}" method="post">
+            <input type="text" name="username" placeholder="Enter username to follow">
+            <input type="submit" value="Follow">
+        </form>
     </div>
-    
-    <div class="main-content">
-        <div class="follow-users">
-            <h3>Follow Users</h3>
-            <form action="{{ url_for('follow', username='') }}" method="post">
-                <input type="text" name="username" placeholder="Enter username to follow">
-                <input type="submit" value="Follow">
-            </form>
-        </div>
-    </div>
-</body>
-</html>
+{% endblock %}

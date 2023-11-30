@@ -1,48 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>View Feed</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <h1>Social Media App</h1>
-    </header>
-    <div class="top-nav">
-        <nav>
-            <a href="{{ url_for('create_post') }}">Create Post</a>
-            <a href="{{ url_for('follow_users') }}">Follow Users</a>
-        </nav>
-    </div>
-    <div class="logout-button">
-        <a href="{{ url_for('logout') }}">Logout</a>
-    </div>
+{% extends "base.html" %}
 
-    <div class="main-content">
-        {% for post in posts %}
-        <div class="post">
-            <p><strong>{{ post.author.username }}</strong>: {{ post.content }}</p>
-            <!-- Display the image if it exists -->
-            {% if post.image %}
-            <img src="{{ url_for('uploaded_file', filename=post.image) }}" alt="{{ post.content }} Image">
+{% block title %}View Feed{% endblock %}
+
+{% block navigation %}
+    <a href="{{ url_for('create_post') }}">Create Post</a>
+    <a href="{{ url_for('follow_users') }}">Follow Users</a>
+{% endblock %}
+
+{% block content %}
+    {% for post in posts %}
+    <div class="post">
+        <p><strong>{{ post.author.username }}</strong>: {{ post.content }}</p>
+        <!-- Display the image if it exists -->
+        {% if post.image %}
+        <img src="{{ url_for('uploaded_file', filename=post.image) }}" alt="{{ post.content }} Image">
+        {% endif %}
+        
+        <!-- Delete button -->
+        {% if post.author.id == current_user.id %}
+            <a href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>
+        {% endif %}
+        
+        <!-- Like/Unlike button -->
+        {% if current_user.is_authenticated %}
+            {% if current_user.has_liked_post(post) %}
+                <a href="{{ url_for('unlike_post', post_id=post.id) }}">Unlike</a>
+            {% else %}
+                <a href="{{ url_for('like_post', post_id=post.id) }}">Like</a>
             {% endif %}
-            
-            <!-- Delete button -->
-            {% if post.author.id == current_user.id %}
-                <a href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>
-            {% endif %}
-            
-            <!-- Like/Unlike button -->
-            {% if current_user.is_authenticated %}
-                {% if current_user.has_liked_post(post) %}
-                    <a href="{{ url_for('unlike_post', post_id=post.id) }}">Unlike</a>
-                {% else %}
-                    <a href="{{ url_for('like_post', post_id=post.id) }}">Like</a>
-                {% endif %}
-            {% endif %}
-        </div>
-        {% endfor %}
+        {% endif %}
     </div>
-</body>
-</html>
+    {% endfor %}
+{% endblock %}
