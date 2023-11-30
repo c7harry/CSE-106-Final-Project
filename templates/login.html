@@ -6,25 +6,99 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            font-family: Arial, sans-serif;
+            background-image: url('{{ url_for('static', filename='images/login.jpg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .centered-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 75vh;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        form p {
+            margin-bottom: 10px;
+        }
+
+        form input[type="text"], form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        form input[type="submit"] {
+            background-color: #0F2D52;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #DAA900;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .modal {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-body {
+            background-color: #fff;
+        }
+
+        .modal-content {
+            background-color: #fff;
+        }
+    </style>
 </head>
 <body>
     <header>
         <img src="{{ url_for('static', filename='images/headertext.png') }}" alt="Header Text" class="header-text">
     </header>
-    <div class="container">
-        <form method="post">
-            {{ form.hidden_tag() }}
-            <p>
-                {{ form.username.label }}<br>
-                {{ form.username(size=32) }}
-            </p>
-            <p>
-                {{ form.password.label }}<br>
-                {{ form.password(size=32) }}
-            </p>
-            <p>{{ form.submit() }}</p>
-        </form>
-        <a href="{{ url_for('register') }}">Don't have an account? Click here</a>
+    <div class="centered-content">
+        <div class="container">
+            <form method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.username.label }}<br>
+                    {{ form.username(size=32) }}
+                </p>
+                <p>
+                    {{ form.password.label }}<br>
+                    {{ form.password(size=32) }}
+                </p>
+                <p>{{ form.submit() }}</p>
+            </form>
+            <a href="{{ url_for('register') }}">Don't have an account? Click here</a>
+        </div>
     </div>
 
     <!-- Modal -->
