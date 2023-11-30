@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <title>Register</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- Include Bootstrap CSS and JS for modal functionality -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <style>
         html, body {
             background-image: url('{{ url_for('static', filename='images/register.jpg') }}');
@@ -24,21 +21,6 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            position: relative;
-        }
-
-        .container {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            border-radius: 8px;
-            text-align: center;
-            position: absolute;
-            top: 60%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50%;
-            max-width: 400px; 
         }
 
         header {
@@ -50,22 +32,57 @@
             padding: 10px 20px;
         }
 
-        .container form {
-            background-color: transparent;
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            text-align: center;
+            width: 50%;
+            max-width: 400px; 
         }
 
-        .container form p:last-child input[type="submit"] {
+        form p {
+            margin-bottom: 10px;
+        }
+
+        form input[type="text"], form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        form input[type="submit"] {
             background-color: #0F2D52;
             color: white;
             border: none;
             padding: 10px 15px;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
 
-        .container form p:last-child input[type="submit"]:hover {
+        form input[type="submit"]:hover {
             background-color: #DAA900;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .modal {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-body {
+            background-color: #fff;
+        }
+
+        .modal-content {
+            background-color: #fff;
         }
     </style>
 </head>
@@ -77,29 +94,6 @@
     </header>
     <div class="centered-content">
         <div class="container">
-            <!-- Modal for Flash Messages -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="modal fade" id="flashModal" tabindex="-1" role="dialog" aria-labelledby="flashModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                {% for category, message in messages %}
-                                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <script>
-                    $(document).ready(function(){
-                        $('#flashModal').modal('show');
-                    });
-                </script>
-            {% endif %}
-            {% endwith %}
-
-            <!-- Registration Form -->
             <form method="post">
                 {{ form.hidden_tag() }}
                 <p>
@@ -133,5 +127,33 @@
             <a href="{{ url_for('login') }}">Already have an account? Login here</a>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="flashModal" tabindex="-1" role="dialog" aria-labelledby="flashModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            {% if get_flashed_messages() %}
+                $('#flashModal').modal('show');
+            {% endif %}
+        });
+    </script>
 </body>
 </html>
