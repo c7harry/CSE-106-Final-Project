@@ -97,30 +97,19 @@
             <form method="post">
                 {{ form.hidden_tag() }}
                 <p>
-                    {{ form.first_name.label }}<br>
-                    {{ form.first_name(size=32) }}
+                    {{ form.first_name(size=32, placeholder="First Name") }}
                 </p>
                 <p>
-                    {{ form.last_name.label }}<br>
-                    {{ form.last_name(size=32) }}
+                    {{ form.last_name(size=32, placeholder="Last Name") }}
                 </p>
                 <p>
-                    {{ form.username.label }}<br>
-                    {{ form.username(size=32) }}
+                    {{ form.username(size=32, placeholder="Username") }}
                 </p>
                 <p>
-                    {{ form.password.label }}<br>
-                    {{ form.password(size=32) }}
-                    {% for error in form.password.errors %}
-                        <span style="color: red;">{{ error }}</span>
-                    {% endfor %}
+                    {{ form.password(size=32, placeholder="Password") }}
                 </p>
                 <p>
-                    {{ form.confirm_password.label }}<br>
-                    {{ form.confirm_password(size=32) }}
-                    {% for error in form.confirm_password.errors %}
-                        <span style="color: red;">{{ error }}</span>
-                    {% endfor %}
+                    {{ form.confirm_password(size=32, placeholder="Confirm Password") }}
                 </p>
                 <p>{{ form.submit() }}</p>
             </form>

@@ -100,19 +100,17 @@
             <form method="post">
                 {{ form.hidden_tag() }}
                 <p>
-                    {{ form.username.label }}<br>
-                    {{ form.username(size=32) }}
+                    {{ form.username(size=32, placeholder="Username") }}
                 </p>
                 <p>
-                    {{ form.password.label }}<br>
-                    {{ form.password(size=32) }}
+                    {{ form.password(size=32, placeholder="Password") }}
                 </p>
                 <p>{{ form.submit() }}</p>
             </form>
             <a href="{{ url_for('register') }}">Don't have an account? Click here</a>
         </div>
     </div>
-
+    
     <!-- Modal -->
     <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
         <div class="modal-dialog">
