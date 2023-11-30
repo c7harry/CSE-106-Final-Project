@@ -7,9 +7,10 @@
 </head>
 <body>
     <header>
-        <h1><a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">BobcatBuzz</a></h1>
-    </header>    
-
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+        <h1><a href="{{ url_for('index') }}" style="color: white; text-decoration: none;">BobcatBuzz</a></h1>
+        <div></div> <!-- Placeholder for alignment -->
+    </header>
     <div class="top-nav">
         <nav>
             {% block navigation %}

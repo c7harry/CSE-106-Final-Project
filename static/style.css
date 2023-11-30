@@ -15,10 +15,12 @@ body {
 }
 
 header {
-    background-color: #3b5998;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #0F2D52;
     color: white;
     padding: 10px 20px;
-    text-align: center;
 }
 
 .logout-button {
@@ -38,6 +40,12 @@ header {
 
 header h1 {
     margin: 0;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.logo {
+    height: 75px;
 }
 
 .top-nav nav a {

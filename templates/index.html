@@ -7,7 +7,9 @@
 </head>
 <body>
     <header>
-        <h1><a href="{{ url_for('index') }}" style="color: white; text-decoration: none;">BobcatBuzz</a></h1>
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+        <h1>BobcatBuzz</h1>
+        <div></div> <!-- Placeholder for alignment -->
     </header>
     <div class="container">
         <a href="{{ url_for('login') }}">Login</a> | 
