@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <header>BobcatBoards</header>
+    <header>
+        <h1><a href="{{ url_for('index') }}" style="color: white; text-decoration: none;">BobcatBuzz</a></h1>
+    </header>
     <div class="container">
         <a href="{{ url_for('login') }}">Login</a> | 
         <a href="{{ url_for('register') }}">Register</a>
