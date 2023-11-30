@@ -17,7 +17,7 @@ body {
 header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     background-color: #0F2D52;
     color: white;
     padding: 10px 20px;
@@ -53,7 +53,7 @@ header h1 {
     text-decoration: none;
     padding: 5px 10px;
     border-radius: 4px;
-    background-color: #4c66a4;
+    background-color: #0F2D52;
 }
 
 .main-content {
@@ -129,7 +129,7 @@ footer {
 }
 
 .top-nav {
-    background-color: #4c66a4;
+    background-color: #0F2D52;
     padding: 10px 0;
     text-align: center;
 }
@@ -144,10 +144,14 @@ footer {
     padding: 5px 10px;
     margin: 0 5px;
     border-radius: 4px;
-    background-color: #365899;
+    background-color: #DAA900;
     transition: background-color 0.3s;
 }
 
 .top-nav nav a:hover {
     background-color: #2d4f8b;
+}
+
+.header-text {
+    height: 75px;
 }
