@@ -27,12 +27,23 @@
             min-height: 75vh;
         }
 
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(15, 45, 82, 0.8);
+            color: white;
+            padding: 10px 20px;
+        }
+
         .container {
             background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             text-align: center;
+            width: 50%;
+            max-width: 400px; 
         }
 
         form p {
@@ -81,7 +92,9 @@
 </head>
 <body>
     <header>
-        <img src="{{ url_for('static', filename='images/headertext.png') }}" alt="Header Text" class="header-text">
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/headertext.png') }}" alt="Header Text" class="header-text">
+        </a>
     </header>
     <div class="centered-content">
         <div class="container">

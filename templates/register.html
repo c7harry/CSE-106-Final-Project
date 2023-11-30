@@ -38,6 +38,17 @@
             top: 60%;
             left: 50%;
             transform: translate(-50%, -50%);
+            width: 50%;
+            max-width: 400px; 
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(15, 45, 82, 0.8);
+            color: white;
+            padding: 10px 20px;
         }
 
         .container form {
@@ -61,7 +72,9 @@
 </head>
 <body>
     <header>
-        <img src="{{ url_for('static', filename='images/headertext.png') }}" alt="Header Text" class="header-text">
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/headertext.png') }}" alt="Header Text" class="header-text">
+        </a>
     </header>
     <div class="centered-content">
         <div class="container">
