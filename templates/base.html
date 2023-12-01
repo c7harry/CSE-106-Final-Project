@@ -10,7 +10,9 @@
 </head>
 <body>
     <header>
-        <img src="{{ url_for('static', filename='images/headertext.png') }}" alt="Header Text" class="header-text">
+        <a href="{{ url_for('home') }}">
+            <img src="{{ url_for('static', filename='images/headertext.png') }}" alt="Header Text" class="header-text">
+        </a>
     </header>    
     <div class="top-nav">
         <nav>
