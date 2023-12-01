@@ -50,13 +50,23 @@
     }
 
     .like-counter {
-        color: #0F2D52; /* Adjust the color to match your theme */
+        color: #0F2D52;
         font-weight: bold;
         margin-left: 10px;
     }
+
+    .like-button {
+        color: #007bff;
+        text-decoration: none;
+        margin-right: 10px;
+        font-size: 20px;
+    }
+
+    .like-button:hover {
+        color: #0056b3;
+    }
 </style>
 {% endblock %}
-
 
 {% block navigation %}
     <a href="{{ url_for('create_post') }}">Create Post</a>
@@ -73,17 +83,17 @@
         {% endif %}
 
         <div>
+            <!-- Like counter -->
+            <span class="like-counter">{{ post.like_count() }}</span>
+
             <!-- Like/Unlike button -->
             {% if current_user.is_authenticated %}
                 {% if current_user.has_liked_post(post) %}
-                    <a href="{{ url_for('unlike_post', post_id=post.id) }}">Unlike</a>
+                    <a href="{{ url_for('unlike_post', post_id=post.id) }}" class="like-button">&#128077;</a>
                 {% else %}
-                    <a href="{{ url_for('like_post', post_id=post.id) }}">Like</a>
+                    <a href="{{ url_for('like_post', post_id=post.id) }}" class="like-button">&#128077;</a>
                 {% endif %}
             {% endif %}
-
-            <!-- Like counter -->
-            <span class="like-counter">{{ post.like_count() }} likes</span>
         </div>
 
         <!-- Delete button -->
