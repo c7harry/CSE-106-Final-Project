@@ -64,6 +64,8 @@ class Post(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     likes = db.relationship('Like', backref='post', lazy='dynamic')
     image = db.Column(db.String(255))
+    def like_count(self):
+        return self.likes.count()
 
 class Like(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
