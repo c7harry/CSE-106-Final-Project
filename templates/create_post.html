@@ -40,14 +40,14 @@
             padding: 12px 20px;
             margin: 8px 0;
             display: inline-block;
-            border: 1px solid #ccc;
+            border: 2px solid #0F2D52;
             border-radius: 4px;
             box-sizing: border-box;
         }
 
         .post-form input[type="submit"] {
             width: 100%;
-            background-color: #4CAF50;
+            background-color: #DAA900;
             color: white;
             padding: 14px 20px;
             margin: 8px 0;
@@ -57,7 +57,7 @@
         }
 
         .post-form input[type="submit"]:hover {
-            background-color: #45a049;
+            background-color: #0F2D52;
         }
 
         .post-form input[type="file"] {
@@ -89,6 +89,19 @@
         .remove-image-button:hover {
             background-color: #d32f2f;
         }
+
+        .alert {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .alert-success {
+            background-color: #28a745;
+        }
     </style>
 {% endblock %}
 
@@ -98,6 +111,14 @@
 {% endblock %}
 
 {% block content %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
     <div class="post-form">
         <h2>Create Post</h2>
         <form method="post" action="{{ url_for('post') }}" enctype="multipart/form-data">

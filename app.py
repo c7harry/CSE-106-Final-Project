@@ -119,8 +119,8 @@ def post():
             post.image = filename
         db.session.add(post)
         db.session.commit()
-        return redirect(url_for('home'))
-    return redirect(request.referrer or url_for('home'))
+        flash('Your post has been created!', 'success')
+    return redirect(request.referrer)
 
 @app.route('/follow/<username>')
 @login_required
