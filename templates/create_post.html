@@ -2,6 +2,61 @@
 
 {% block title %}Create Post{% endblock %}
 
+{% block head %}
+    <style>
+        html, body {
+            background-image: url('{{ url_for('static', filename='images/create_post.jpg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+        }
+
+        .post-form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            text-align: center;
+            border: 3px solid #0F2D52;
+            max-width: 500px;
+            margin: 0 auto;
+            margin-top: 50px;
+        }
+
+        .post-form h2 {
+            color: #0F2D52;
+            margin-bottom: 20px;
+        }
+
+        .post-form form p {
+            margin-bottom: 15px;
+        }
+
+        .post-form form input, .post-form form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 2px solid #0F2D52;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .post-form form input[type="submit"] {
+            background-color: #0F2D52;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .post-form form input[type="submit"]:hover {
+            background-color: #DAA900;
+        }
+    </style>
+{% endblock %}
+
 {% block navigation %}
     <a href="{{ url_for('view_feed') }}">View Feed</a>
     <a href="{{ url_for('follow_users') }}">Follow Users</a>
