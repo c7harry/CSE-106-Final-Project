@@ -5,7 +5,13 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 
+from flask_admin import AdminIndexView, expose
+from flask import redirect, url_for, flash, request
+from flask_login import current_user
+
+
 db = SQLAlchemy()
+
 
 class Follow(db.Model):
     __tablename__ = 'follow'
@@ -64,6 +70,9 @@ class User(db.Model, UserMixin):
 
     def has_liked_post(self, post):
         return Like.query.filter(Like.user_id == self.id, Like.post_id == post.id).count() > 0
+    
+    def __repr__(self):
+        return f'<User {self.username}>'
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -78,3 +87,14 @@ class Post(db.Model):
 class Like(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), primary_key=True)
+
+# Function to add an admin user
+def add_admin_user():
+    if User.query.filter_by(username='admin').first() is None:
+        admin_user = User(username='admin', first_name='Admin', last_name='User')
+        admin_user.set_password('adminPassword')  # Replace with a strong password
+        db.session.add(admin_user)
+        db.session.commit()
+        print('Admin user created successfully.')
+    else:
+        print('Admin user already exists.')

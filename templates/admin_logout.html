@@ -1,0 +1,10 @@
+<!-- templates/admin/master.html -->
+
+{% extends 'admin/base.html' %}
+
+{% block navbar %}
+    <div style="float: right;">
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+    {{ super() }}
+{% endblock %}
