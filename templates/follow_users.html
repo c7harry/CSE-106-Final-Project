@@ -49,6 +49,25 @@
     .follow-users input[type="submit"]:hover {
         background-color: #0F2D52;
     }
+
+    .btn-danger {
+        color: white;
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+    
+    .btn-danger:hover {
+        color: white;
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+    
+    .btn-sm {
+        padding: .25rem .5rem;
+        font-size: .875rem;
+        line-height: 1.5;
+        border-radius: .2rem;
+    }
 </style>
 {% endblock %}
 
@@ -65,13 +84,15 @@
             <input type="submit" value="Follow">
         </form>
 
-        <h3>Users You Follow</h3>
-        <ul>
-            {% for user in followed_users %}
-                <li>{{ user.username }}</li>
-            {% else %}
-                <li>You are not following anyone yet.</li>
-            {% endfor %}
-        </ul>
-    </div>
+    <h3>Users You Follow</h3>
+    <ul>
+        {% for user in followed_users %}
+            <li>{{ user.username }} 
+                <a href="{{ url_for('unfollow', username=user.username) }}" class="btn btn-danger btn-sm">Unfollow</a>
+            </li>
+        {% else %}
+            <li>You are not following anyone yet.</li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
