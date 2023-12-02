@@ -101,11 +101,21 @@ def view_feed():
     posts = Post.query.order_by(Post.timestamp.desc()).all()
     return render_template('view_feed.html', posts=posts)
 
-@app.route('/follow_users')
+@app.route('/follow_users', methods=['GET', 'POST'])
 @login_required
 def follow_users():
-    # Implement logic to display follow users section
-    return render_template('follow_users.html')
+    if request.method == 'POST':
+        username = request.form.get('username')
+        user_to_follow = User.query.filter_by(username=username).first()
+        if user_to_follow and user_to_follow != current_user:
+            current_user.follow(user_to_follow)
+            db.session.commit()
+            flash(f'You are now following {username}!', 'success')
+        else:
+            flash('User not found or cannot follow yourself.', 'danger')
+    
+    followed_users = current_user.followed.all()
+    return render_template('follow_users.html', followed_users=followed_users)
 
 @app.route('/post', methods=['GET', 'POST'])
 @login_required

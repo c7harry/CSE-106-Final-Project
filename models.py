@@ -8,10 +8,12 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 db = SQLAlchemy()
 
 class Follow(db.Model):
+    __tablename__ = 'follow'
     follower_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     followed_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     
 class User(db.Model, UserMixin):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
@@ -37,12 +39,18 @@ class User(db.Model, UserMixin):
             db.session.add(follow)
 
     def unfollow(self, user):
-        follow = self.followed.filter_by(followed_id=user.id).first()
+        follow = self.followed.filter(
+            Follow.followed_id == user.id, 
+            Follow.follower_id == self.id
+        ).first()
         if follow:
             db.session.delete(follow)
 
     def is_following(self, user):
-        return self.followed.filter_by(followed_id=user.id).count() > 0
+        return self.followed.filter(
+            Follow.followed_id == user.id, 
+            Follow.follower_id == self.id
+        ).count() > 0
 
     def like_post(self, post):
         if not self.has_liked_post(post):
