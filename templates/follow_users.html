@@ -68,6 +68,35 @@
         line-height: 1.5;
         border-radius: .2rem;
     }
+
+    .user-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .user-item {
+        background-color: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        padding: 10px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .alert {
+        padding: 10px;
+        background-color: #FF0000;
+        color: white;
+        margin-bottom: 15px;
+        border-radius: 4px;
+        text-align: center;
+    }
+    
+    .alert-success {
+        background-color: #28a745;
+    }
 </style>
 {% endblock %}
 
@@ -77,6 +106,15 @@
 {% endblock %}
 
 {% block content %}
+    <!-- Flash messages code -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <div class="follow-users">
         <h3>Follow Users</h3>
         <form action="{{ url_for('follow_users') }}" method="post">
@@ -84,15 +122,16 @@
             <input type="submit" value="Follow">
         </form>
 
-    <h3>Users You Follow</h3>
-    <ul>
-        {% for user in followed_users %}
-            <li>{{ user.username }} 
-                <a href="{{ url_for('unfollow', username=user.username) }}" class="btn btn-danger btn-sm">Unfollow</a>
-            </li>
-        {% else %}
-            <li>You are not following anyone yet.</li>
-        {% endfor %}
-    </ul>
-</div>
+        <h3>Users You Follow</h3>
+        <div class="user-list">
+            {% for user in followed_users %}
+                <div class="user-item">
+                    {{ user.username }} 
+                    <a href="{{ url_for('unfollow', username=user.username) }}" class="btn btn-danger btn-sm">Unfollow</a>
+                </div>
+            {% else %}
+                <div class="user-item">You are not following anyone yet.</div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

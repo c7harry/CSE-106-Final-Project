@@ -132,29 +132,17 @@ def post():
         flash('Your post has been created!', 'success')
     return redirect(request.referrer)
 
-@app.route('/follow/<username>')
-@login_required
-def follow(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash('User not found.')
-        return redirect(url_for('index'))
-    current_user.follow(user)
-    db.session.commit()
-    flash('You are following {}!'.format(username))
-    return redirect(request.referrer or url_for('index'))
-
 @app.route('/unfollow/<username>')
 @login_required
 def unfollow(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
+    user_to_unfollow = User.query.filter_by(username=username).first()
+    if user_to_unfollow:
+        current_user.unfollow(user_to_unfollow)
+        db.session.commit()
+        flash('You are no longer following {}.'.format(username))
+    else:
         flash('User not found.')
-        return redirect(url_for('index'))
-    current_user.unfollow(user)
-    db.session.commit()
-    flash('You are not following {}.'.format(username))
-    return redirect(request.referrer or url_for('index'))
+    return redirect(url_for('follow_users'))
 
 @app.route('/like/<int:post_id>')
 @login_required
