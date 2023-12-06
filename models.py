@@ -11,6 +11,7 @@ class Follow(db.Model):
     __tablename__ = 'follow'
     follower_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     followed_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    followed_username = db.Column(db.String(80), nullable = False)
     
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
@@ -22,10 +23,10 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     likes = db.relationship('Like', backref='user', lazy='dynamic')
     followed = db.relationship(
-        'User', secondary='follow',
+        'Follow', secondary='follow',
         primaryjoin=(Follow.follower_id == id),
         secondaryjoin=(Follow.followed_id == id),
-        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+        backref='user', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -35,14 +36,12 @@ class User(db.Model, UserMixin):
     
     def follow(self, user):
         if not self.is_following(user):
-            follow = Follow(follower_id=self.id, followed_id=user.id)
+            follow = Follow(follower_id=self.id, followed_id=user.id, followed_username = user.username)
             db.session.add(follow)
 
     def unfollow(self, user):
-        follow = self.followed.filter(
-            Follow.followed_id == user.id, 
-            Follow.follower_id == self.id
-        ).first()
+        follow = self.followed.filter_by(follower_id = user.id)
+        print(follow)
         if follow:
             db.session.delete(follow)
 
@@ -55,10 +54,12 @@ class User(db.Model, UserMixin):
     def like_post(self, post):
         if not self.has_liked_post(post):
             like = Like(user_id=self.id, post_id=post.id)
+            print(like)
             db.session.add(like)
 
     def unlike_post(self, post):
         like = self.likes.filter_by(post_id=post.id).first()
+        print(like)
         if like:
             db.session.delete(like)
 

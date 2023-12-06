@@ -124,10 +124,10 @@
 
         <h3>Users You Follow</h3>
         <div class="user-list">
-            {% for user in followed_users %}
+            {% for follow in followed_users %}
                 <div class="user-item">
-                    {{ user.username }} 
-                    <a href="{{ url_for('unfollow', username=user.username) }}" class="btn btn-danger btn-sm">Unfollow</a>
+                    {{ follow.followed_username }}
+                    <a href="{{ url_for('unfollow', username=follow.followed_username) }}" class="btn btn-danger btn-sm">Unfollow</a>
                 </div>
             {% else %}
                 <div class="user-item">You are not following anyone yet.</div>
