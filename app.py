@@ -24,12 +24,12 @@ app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
 
 db.init_app(app)
 
-admin = Admin(app, name='My Social Media Admin', template_mode='bootstrap3')
+# admin = Admin(app, name='My Social Media Admin', template_mode='bootstrap3')
 
-admin.add_view(ModelView(User, db.session))
-admin.add_view(ModelView(Post, db.session))
-admin.add_view(ModelView(Like, db.session))
-admin.add_view(ModelView(Follow, db.session))
+# admin.add_view(ModelView(User, db.session))
+# admin.add_view(ModelView(Post, db.session))
+# admin.add_view(ModelView(Like, db.session))
+# admin.add_view(ModelView(Follow, db.session))
 
 
 login_manager = LoginManager(app)
@@ -39,14 +39,23 @@ login_manager.login_message_category = 'info'
 class MyAdminIndexView(AdminIndexView):
     @expose('/')
     def index(self):
-        if not self.is_accessible():
+        # Check if user is authenticated and has the username 'admin'
+        if not (current_user.is_authenticated and current_user.username == 'admin'):
             flash("You need to be an admin to access this page.", "warning")
             return redirect(url_for('login', next=request.url))
-        return self.render('admin_logout.html')
-
+        return super(MyAdminIndexView, self).index()
 
     def is_accessible(self):
-        return current_user.is_authenticated and current_user.username == "admin"
+        # Only allow users with the username 'admin'
+        return current_user.is_authenticated and current_user.username == 'admin'
+
+# Modify the Admin initialization to use the custom index view
+admin = Admin(app, name='My Social Media Admin', template_mode='bootstrap3', index_view=MyAdminIndexView())
+
+admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(Post, db.session))
+admin.add_view(ModelView(Like, db.session))
+admin.add_view(ModelView(Follow, db.session))
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -111,11 +120,18 @@ def home():
     posts = Post.query.order_by(Post.timestamp.desc()).all()
     return render_template('home.html', posts=posts, form=form)
 
-@app.route("/logout", methods=['POST'])
+@app.route("/logout", methods=['GET', 'POST'])
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+# @app.route("/logout", methods=['POST'])
+# @login_required
+# def logout():
+#     logout_user()
+#     return redirect(url_for('index'))
 
 @app.route('/create_post')
 @login_required
