@@ -12,15 +12,11 @@ from flask_admin.contrib.sqla import ModelView
 from models import db, add_admin_user
 from flask_admin import Admin, AdminIndexView, expose
 
-
-
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key' 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///social_media.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
-
 
 db.init_app(app)
 
@@ -53,9 +49,9 @@ class MyAdminIndexView(AdminIndexView):
 admin = Admin(app, name='My Social Media Admin', template_mode='bootstrap3', index_view=MyAdminIndexView())
 
 admin.add_view(ModelView(User, db.session))
-admin.add_view(ModelView(Post, db.session))
-admin.add_view(ModelView(Like, db.session))
-admin.add_view(ModelView(Follow, db.session))
+# admin.add_view(ModelView(Post, db.session))
+# admin.add_view(ModelView(Like, db.session))
+# admin.add_view(ModelView(Follow, db.session))
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -221,6 +217,11 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
     return redirect(request.referrer or url_for('home'))
+
+@app.route('/admin')
+def admin_dashboard():
+    return render_template('admin/index.html')
+
 
 # if __name__ == '__main__':
 #     with app.app_context():
