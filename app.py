@@ -220,7 +220,7 @@ def delete_post(post_id):
 
 @app.route('/admin')
 def admin_dashboard():
-    return render_template('admin/index.html')
+    return redirect(url_for('admin.index'))
 
 
 # if __name__ == '__main__':
