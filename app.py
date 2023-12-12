@@ -8,6 +8,10 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
+from wtforms.validators import InputRequired, EqualTo
+from flask_wtf import FlaskForm
 
 from models import db, add_admin_user
 from flask_admin import Admin, AdminIndexView, expose
@@ -20,14 +24,6 @@ app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
 
 db.init_app(app)
 
-# admin = Admin(app, name='My Social Media Admin', template_mode='bootstrap3')
-
-# admin.add_view(ModelView(User, db.session))
-# admin.add_view(ModelView(Post, db.session))
-# admin.add_view(ModelView(Like, db.session))
-# admin.add_view(ModelView(Follow, db.session))
-
-
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
@@ -35,23 +31,32 @@ login_manager.login_message_category = 'info'
 class MyAdminIndexView(AdminIndexView):
     @expose('/')
     def index(self):
-        # Check if user is authenticated and has the username 'admin'
         if not (current_user.is_authenticated and current_user.username == 'admin'):
             flash("You need to be an admin to access this page.", "warning")
             return redirect(url_for('login', next=request.url))
         return super(MyAdminIndexView, self).index()
 
     def is_accessible(self):
-        # Only allow users with the username 'admin'
         return current_user.is_authenticated and current_user.username == 'admin'
 
-# Modify the Admin initialization to use the custom index view
-admin = Admin(app, name='My Social Media Admin', template_mode='bootstrap3', index_view=MyAdminIndexView())
+class UserCreateForm(FlaskForm):
+    first_name = StringField('First Name', validators=[DataRequired()])
+    last_name = StringField('Last Name', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[InputRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[InputRequired(), EqualTo('password', message='Passwords must match.')])
+    
+class UserAdmin(ModelView):
+    form_excluded_columns = ['password_hash']
+    create_form = UserCreateForm
+    def on_model_change(self, form, model, is_created):
+        if is_created:
+            model.password_hash = generate_password_hash(form.password.data)
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.username == 'admin'
 
-admin.add_view(ModelView(User, db.session))
-# admin.add_view(ModelView(Post, db.session))
-# admin.add_view(ModelView(Like, db.session))
-# admin.add_view(ModelView(Follow, db.session))
+admin = Admin(app, name='Bobcat Buzz Admin Page', template_mode='bootstrap3', index_view=MyAdminIndexView())
+admin.add_view(UserAdmin(User, db.session))
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -121,13 +126,6 @@ def home():
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
-
-# @app.route("/logout", methods=['POST'])
-# @login_required
-# def logout():
-#     logout_user()
-#     return redirect(url_for('index'))
 
 @app.route('/create_post')
 @login_required
@@ -222,14 +220,8 @@ def delete_post(post_id):
 def admin_dashboard():
     return redirect(url_for('admin.index'))
 
-
-# if __name__ == '__main__':
-#     with app.app_context():
-#         db.create_all() 
-#     app.run(debug=True)
-
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        add_admin_user()  # This will create the admin user if it doesn't exist
+        add_admin_user() 
     app.run(debug=True)
