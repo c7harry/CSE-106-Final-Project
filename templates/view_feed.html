@@ -74,6 +74,15 @@
 {% endblock %}
 
 {% block content %}
+    <!-- Add a toggle button -->
+    <div>
+        {% if show_followed %}
+            <a href="{{ url_for('view_feed', followed='false') }}">Show All Posts</a>
+        {% else %}
+            <a href="{{ url_for('view_feed', followed='true') }}">Show Followed Users' Posts</a>
+        {% endif %}
+    </div>
+    
     {% for post in posts %}
     <div class="post">
         <p><strong>{{ post.author.username }}</strong>: {{ post.content }}</p>

@@ -72,6 +72,10 @@ class User(db.Model, UserMixin):
     def has_liked_post(self, post):
         return Like.query.filter(Like.user_id == self.id, Like.post_id == post.id).count() > 0
     
+    def get_followed_posts(self):
+        followed_users_ids = [follow.followed_id for follow in self.followed]
+        return Post.query.filter(Post.user_id.in_(followed_users_ids)).order_by(Post.timestamp.desc()).all()
+    
     def __repr__(self):
         return f'<User {self.username}>'
 

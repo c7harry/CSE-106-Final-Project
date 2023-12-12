@@ -136,8 +136,16 @@ def create_post():
 @app.route('/view_feed')
 @login_required
 def view_feed():
-    posts = Post.query.order_by(Post.timestamp.desc()).all()
-    return render_template('view_feed.html', posts=posts)
+    show_followed = request.args.get('followed', 'false').lower() == 'true'
+    
+    if show_followed:
+        # Assuming you have a method to get posts from followed users
+        posts = current_user.get_followed_posts()
+    else:
+        posts = Post.query.order_by(Post.timestamp.desc()).all()
+    
+    return render_template('view_feed.html', posts=posts, show_followed=show_followed)
+
 
 @app.route('/follow_users', methods=['GET', 'POST'])
 @login_required
