@@ -65,6 +65,26 @@
     .like-button:hover {
         color: #0056b3;
     }
+
+    .toggle-button-container {
+        text-align: center;
+    }
+
+    .toggle-button {
+        display: inline-block;
+        padding: 8px 15px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        background-color: #0F2D52;
+        color: white;
+        text-decoration: none;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .toggle-button:hover {
+        background-color: #DAA900;
+        transform: translateY(-2px);
+    }
 </style>
 {% endblock %}
 
@@ -74,15 +94,15 @@
 {% endblock %}
 
 {% block content %}
-    <!-- Add a toggle button -->
-    <div>
+    <!-- toggle button -->
+    <div class="toggle-button-container">
         {% if show_followed %}
-            <a href="{{ url_for('view_feed', followed='false') }}">Show All Posts</a>
+            <a href="{{ url_for('view_feed', followed='false') }}" class="toggle-button">Show All Posts</a>
         {% else %}
-            <a href="{{ url_for('view_feed', followed='true') }}">Show Followed Users' Posts</a>
+            <a href="{{ url_for('view_feed', followed='true') }}" class="toggle-button">Show Followed Users' Posts</a>
         {% endif %}
     </div>
-    
+
     {% for post in posts %}
     <div class="post">
         <p><strong>{{ post.author.username }}</strong>: {{ post.content }}</p>
