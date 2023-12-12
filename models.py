@@ -74,6 +74,7 @@ class User(db.Model, UserMixin):
     
     def get_followed_posts(self):
         followed_users_ids = [follow.followed_id for follow in self.followed]
+        followed_users_ids.append(self.id)
         return Post.query.filter(Post.user_id.in_(followed_users_ids)).order_by(Post.timestamp.desc()).all()
     
     def __repr__(self):
