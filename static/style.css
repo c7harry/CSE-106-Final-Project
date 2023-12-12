@@ -33,7 +33,7 @@ header {
     justify-content: center;
     background-color: rgba(15, 45, 82, 0.8);
     color: white;
-    padding: 0px 0px;
+    padding: 10px 0px;
 }
 
 .logout-button {
