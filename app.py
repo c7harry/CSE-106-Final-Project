@@ -6,6 +6,11 @@ from models import User,Like, Post, db, Follow
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from werkzeug.utils import secure_filename
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+
+from models import db, add_admin_user
+from flask_admin import Admin, AdminIndexView, expose
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key' 
@@ -13,12 +18,40 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///social_media.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
 
-
 db.init_app(app)
+
+# admin = Admin(app, name='My Social Media Admin', template_mode='bootstrap3')
+
+# admin.add_view(ModelView(User, db.session))
+# admin.add_view(ModelView(Post, db.session))
+# admin.add_view(ModelView(Like, db.session))
+# admin.add_view(ModelView(Follow, db.session))
+
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
+
+class MyAdminIndexView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        # Check if user is authenticated and has the username 'admin'
+        if not (current_user.is_authenticated and current_user.username == 'admin'):
+            flash("You need to be an admin to access this page.", "warning")
+            return redirect(url_for('login', next=request.url))
+        return super(MyAdminIndexView, self).index()
+
+    def is_accessible(self):
+        # Only allow users with the username 'admin'
+        return current_user.is_authenticated and current_user.username == 'admin'
+
+# Modify the Admin initialization to use the custom index view
+admin = Admin(app, name='My Social Media Admin', template_mode='bootstrap3', index_view=MyAdminIndexView())
+
+admin.add_view(ModelView(User, db.session))
+# admin.add_view(ModelView(Post, db.session))
+# admin.add_view(ModelView(Like, db.session))
+# admin.add_view(ModelView(Follow, db.session))
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -83,11 +116,18 @@ def home():
     posts = Post.query.order_by(Post.timestamp.desc()).all()
     return render_template('home.html', posts=posts, form=form)
 
-@app.route("/logout")
+@app.route("/logout", methods=['GET', 'POST'])
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+# @app.route("/logout", methods=['POST'])
+# @login_required
+# def logout():
+#     logout_user()
+#     return redirect(url_for('index'))
 
 @app.route('/create_post')
 @login_required
@@ -178,7 +218,18 @@ def delete_post(post_id):
     db.session.commit()
     return redirect(request.referrer or url_for('home'))
 
+@app.route('/admin')
+def admin_dashboard():
+    return redirect(url_for('admin.index'))
+
+
+# if __name__ == '__main__':
+#     with app.app_context():
+#         db.create_all() 
+#     app.run(debug=True)
+
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all() 
+        db.create_all()
+        add_admin_user()  # This will create the admin user if it doesn't exist
     app.run(debug=True)
