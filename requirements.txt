@@ -11,7 +11,6 @@ cryptography==3.4.8
 dbus-python==1.2.18
 distlib==0.3.7
 distro==1.7.0
-distro-info===1.1build1
 filelock==3.12.4
 Flask==2.2.2
 Flask-Admin==1.6.1
